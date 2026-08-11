@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผงกดคีย์</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b0714;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #130e21;
+            border: 2px solid #3b2361;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .logo-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #8a2be2;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+            margin-bottom: 12px;
+        }
+        h2 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+        }
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0, 255, 127, 0.1);
+            border: 1px solid #00ff7f;
+            color: #00ff7f;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00ff7f;
+            border-fadius: 50%;
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 8px #00ff7f;
+        }
+        .section-title {
+            color: #b19cd9;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 8px;
+        }
+        select, input {
+            width: 100%;
+            background: #1c1530;
+            border: 1px solid #3b2361;
+            border-radius: 12px;
+            padding: 14px;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+        select:focus, input:focus {
+            border-color: #8a2be2;
+            box-shadow: 0 0 8px rgba(138, 43, 226, 0.4);
+        }
+        .btn-generate {
+            width: 100%;
+            background: linear-gradient(135deg, #8a2be2, #da70d6);
+            border: none;
+            border-radius: 30px;
+            padding: 16px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+        }
+        .btn-generate:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .result-box {
+            margin-top: 20px;
+            background: #1c1530;
+            border: 1px dashed #8a2be2;
+            padding: 12px;
+            border-radius: 12px;
+            word-break: break-all;
+            text-align: center;
+            font-family: monospace;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <!-- ใส่ลิงก์รูปภาพที่ 2 ตรงขอบ src ด้านล่างนี้ (อันนี้ผมใส่ชื่อไฟล์ตามที่คุณอัปมา) -->
+            <img src="image_2.png" alt="Logo" class="logo-img">
+            <h2>แผงกดคีย์</h2>
+            <div class="live-badge">
+                <div class="live-dot"></div> Key Generator
+            </div>
+        </div>
+
+        <div class="section-title">GENERATE สร้างคีย์ใช้งาน</div>
+
+        <div class="form-group">
+            <label>ประเภترะยะเวลา</label>
+            <select id="keyType" onchange="toggleDayInput()">
+                <option value="day">รายวัน (Day)</option>
+                <option value="permanent">ถาวร (Permanent)</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="dayGroup">
+            <label>จำนวนวัน</label>
+            <input type="number" id="dayAmount" value="1" min="1">
+        </div>
+
+        <div class="form-group">
+            <label>จำนวนคีย์ที่ต้องการสร้าง</label>
+            <input type="number" id="keyCount" value="1" min="1">
+        </div>
+
+        <button class="btn-generate" onclick="generateKey()">รับคีย์</button>
+
+        <div class="result-box" id="resultBox"></div>
+    </div>
+
+    <script>
+        function toggleDayInput() {
+            const keyType = document.getElementById('keyType').value;
+            const dayGroup = document.getElementById('dayGroup');
+            if (keyType === 'permanent') {
+                dayGroup.style.display = 'none';
+            } else {
+                dayGroup.style.display = 'block';
+            }
+        }
+
+        function generateRandomNumber() {
+            return Math.floor(10000 + Math.random() * 90000); // สุ่มเลข 5 หลัก
+        }
+
+        function generateKey() {
+            const keyType = document.getElementById('keyType').value;
+            const keyCount = parseInt(document.getElementById('keyCount').value);
+            const dayAmount = document.getElementById('dayAmount').value;
+            let results = [];
+
+            for (let i = 0; i < keyCount; i++) {
+                const randomNum = generateRandomNumber();
+                if (keyType === 'day') {
+                    results.push(`AIMBOTRP-${dayAmount}-${randomNum}`);
+                } else {
+                    results.push(`AIMBOTRP-PREMIUM-${randomNum}`);
+                }
+            }
+
+            const resultBox = document.getElementById('resultBox');
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = results.join('<br>');
+        }
+    </script>
+
+</body>
+</html>
